@@ -63,7 +63,7 @@ const ContactForm = () => {
               ></textarea>
               <button
                 type="submit"
-                className="border border-white text-white py-3 px-8 rounded-full transition-all hover:bg-white hover:text-black"
+                className="border border-white text-white py-3 px-8 rounded-full transition-all hover:bg-white hover:text-black max-w-[200px]"
               >
                 Send
               </button>
