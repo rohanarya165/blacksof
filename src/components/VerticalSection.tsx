@@ -45,6 +45,7 @@ const VehicleSection = () => {
     const [activeTab, setActiveTab] = useState<"passenger" | "commercial">("passenger");
     const [activeData, setActiveData] = useState(videoDataPassenger);
     const [activeVideo, setActiveVideo] = useState(videoDataPassenger[0].VideoUrl);
+    const [activeLogo, setAciveLogo] = useState("Complete Body")
 
     useEffect(() => {
         const data = activeTab === "passenger" ? videoDataPassenger : videoDataComer;
@@ -124,9 +125,11 @@ const VehicleSection = () => {
                             <div
                                 key={index}
                                 className="text-xs text-center cursor-pointer"
-                                onClick={() => setActiveVideo(item.VideoUrl)}
+                                onClick={() => {setActiveVideo(item.VideoUrl)
+                                    setAciveLogo(item.name)
+                                }}
                             >
-                                <img src={item.logo} alt={item.name} className="w-16 h-16 mb-1" />
+                                <img src={item.logo} alt={item.name} className={`w-16 h-16 mb-1 ${item?.name !== activeLogo && "opacity-50"}`} />
                                 <p>{item.name}</p>
                             </div>
                         ))}
