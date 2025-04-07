@@ -1,4 +1,5 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
+import { motion, AnimatePresence, useInView } from "framer-motion";
 
 const videoDataPassenger = [
     {
@@ -41,103 +42,136 @@ const videoDataComer = [
     }
 ];
 
+
 const VehicleSection = () => {
-    const [activeTab, setActiveTab] = useState<"passenger" | "commercial">("passenger");
-    const [activeData, setActiveData] = useState(videoDataPassenger);
-    const [activeVideo, setActiveVideo] = useState(videoDataPassenger[0].VideoUrl);
-    const [activeLogo, setAciveLogo] = useState("Complete Body")
+  const [activeTab, setActiveTab] = useState<"passenger" | "commercial">("passenger");
+  const [activeData, setActiveData] = useState(videoDataPassenger);
+  const [activeVideo, setActiveVideo] = useState(videoDataPassenger[0].VideoUrl);
+  const [activeLogo, setAciveLogo] = useState("Complete Body");
 
-    useEffect(() => {
-        const data = activeTab === "passenger" ? videoDataPassenger : videoDataComer;
-        setActiveData(data);
-        setActiveVideo(data[0].VideoUrl);
-    }, [activeTab]);
+  const contentRef = useRef(null);
+  const isInView = useInView(contentRef, { once: true, margin: "-20% 0px" });
 
-    return (
-        <section className="relative h-screen w-full bg-black text-white overflow-hidden">
-            {/* Heading */}
-            <div className="text-center pt-10">
-                <h1 className="text-2xl md:text-4xl font-light">
-                    Evolving the drive with <span className="font-semibold">360-degree</span><br />
-                    comprehensive solutions
-                </h1>
-            </div>
+  useEffect(() => {
+    const data = activeTab === "passenger" ? videoDataPassenger : videoDataComer;
+    setActiveData(data);
+    setActiveVideo(data[0].VideoUrl);
+    setAciveLogo(data[0].name);
+  }, [activeTab]);
 
-            {/* Content */}
-            <div className="flex flex-col md:flex-row h-full items-center justify-between">
-                {/* Tabs */}
+  return (
+    <section className="relative min-h-screen w-full bg-black text-white overflow-hidden">
+      {/* Heading */}
+      <div className="text-center pt-20">
+        <motion.h1
+          initial={{ opacity: 0, y: -10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6 }}
+          className="text-2xl md:text-4xl font-light"
+        >
+          Evolving the drive with <span className="font-semibold">360-degree</span><br />
+          comprehensive solutions
+        </motion.h1>
+      </div>
 
-                <div className="flex flex-col gap-8 md:w-1/3 px-6 pb-20">
-          {[
-            {
-              type: "passenger",
-              title: "Passenger vehicles",
-              subtitle: "Revving up innovation from interior to exterior."
-            },
-            {
-              type: "commercial",
-              title: "Commercial vehicles",
-              subtitle: "Advancing engineering for heavy-duty vehicles."
-            }
-          ].map((tab) => (
-            <div
-              key={tab.type}
-              className={`cursor-pointer border-l-4 pl-4 ${
-                activeTab === tab.type ? "border-white" : "border-transparent text-[#3D3D3D]"
-              }`}
-              onClick={() => setActiveTab(tab.type as "passenger" | "commercial")}
+      {/* Rest of the content appears on scroll */}
+      <div ref={contentRef}>
+        <AnimatePresence>
+          {isInView && (
+            <motion.div
+              initial={{ opacity: 0, y: 50 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: 50 }}
+              transition={{ duration: 0.8 }}
+              className="flex flex-col md:flex-row h-full items-center justify-between pt-20"
             >
-              <p
-                className="text-[28px] font-[700] font-[Manrope]"
-              >
-                {tab.title}
-              </p>
-              <p
-                className="text-[18px] font-[400] leading-[100%] tracking-[-0.5px] font-[Manrope] mt-2"
-              >
-                {tab.subtitle}
-              </p>
-            </div>
-          ))}
-        </div>
+              {/* Tabs */}
+              <div className="flex flex-col gap-8 md:w-1/3 px-6 pb-20">
+                {[
+                  {
+                    type: "passenger",
+                    title: "Passenger vehicles",
+                    subtitle: "Revving up innovation from interior to exterior.",
+                  },
+                  {
+                    type: "commercial",
+                    title: "Commercial vehicles",
+                    subtitle: "Advancing engineering for heavy-duty vehicles.",
+                  },
+                ].map((tab) => (
+                  <motion.div
+                    key={tab.type}
+                    className={`cursor-pointer border-l-4 pl-4 ${
+                      activeTab === tab.type ? "border-white" : "border-transparent text-[#3D3D3D]"
+                    }`}
+                    whileHover={{ scale: 1.02 }}
+                    transition={{ type: "spring", stiffness: 200 }}
+                    onClick={() => setActiveTab(tab.type as "passenger" | "commercial")}
+                  >
+                    <p className="text-[28px] font-[700] font-[Manrope]">
+                      {tab.title}
+                    </p>
+                    <p className="text-[18px] font-[400] leading-[100%] tracking-[-0.5px] font-[Manrope] mt-2">
+                      {tab.subtitle}
+                    </p>
+                  </motion.div>
+                ))}
+              </div>
 
-
-                {/* Video and Icons */}
-                <div className="md:w-2/3 w-full flex flex-col justify-center items-center">
-
-                    {/* Video */}
-                    <div className="mb-10 w-full flex justify-center">
-                        <video
-                            key={activeVideo}
-                            autoPlay
-                            loop
-                            muted
-                            playsInline
-                            className="w-full md:w-[500px] object-cover"
-                        >
-                            <source src={activeVideo} type="video/mp4" />
-                        </video>
-                    </div>
-
-                    {/* Icons */}
-                    <div className="flex gap-8 justify-center mb-10 flex-wrap px-4">
-                        {activeData.map((item, index) => (
-                            <div
-                                key={index}
-                                className="text-xs text-center cursor-pointer"
-                                onClick={() => {setActiveVideo(item.VideoUrl)
-                                    setAciveLogo(item.name)
-                                }}
-                            >
-                                <img src={item.logo} alt={item.name} className={`w-16 h-16 mb-1 ${item?.name !== activeLogo && "opacity-50"}`} />
-                                <p>{item.name}</p>
-                            </div>
-                        ))}
-                    </div>
+              {/* Video and Icons */}
+              <div className="md:w-2/3 w-full flex flex-col justify-center items-center">
+                {/* Video */}
+                <div className="mb-10 w-full flex justify-center">
+                  <AnimatePresence mode="wait">
+                    <motion.video
+                      key={activeVideo}
+                      autoPlay
+                      loop
+                      muted
+                      playsInline
+                      className="w-full md:w-[500px] object-cover"
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      exit={{ opacity: 0 }}
+                      transition={{ duration: 0.6 }}
+                    >
+                      <source src={activeVideo} type="video/mp4" />
+                    </motion.video>
+                  </AnimatePresence>
                 </div>
-            </div>
-        </section>
-    );
+
+                {/* Icons */}
+                <div className="flex gap-8 justify-center mb-10 flex-wrap px-4">
+                  {activeData.map((item, index) => (
+                    <motion.div
+                      key={index}
+                      className="text-xs text-center cursor-pointer"
+                      onClick={() => {
+                        setActiveVideo(item.VideoUrl);
+                        setAciveLogo(item.name);
+                      }}
+                      whileHover={{ scale: 1.1 }}
+                      transition={{ type: "spring", stiffness: 300 }}
+                    >
+                      <motion.img
+                        src={item.logo}
+                        alt={item.name}
+                        className={`w-16 h-16 mb-1 transition-opacity ${
+                          item?.name !== activeLogo ? "opacity-50" : "opacity-100"
+                        }`}
+                      />
+                      <p className="text-white">{item.name}</p>
+                    </motion.div>
+                  ))}
+                </div>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </div>
+    </section>
+  );
 };
 
 export default VehicleSection;
+
