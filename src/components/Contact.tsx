@@ -1,9 +1,9 @@
 
 const ContactForm = () => {
   return (
-    <div className="bg-blue-500 ">
+    <div className="bg-[#0067B1] ">
       <div className="max-w-[1380px] mx-auto px-4 lg:w-10/12 relative">
-        <div className="bg-blue-500 grid grid-cols-12 px-4 md:px-0 rounded-lg py-8 md:py-10 lg:py-12 xl:py-16">
+        <div className="bg-[#0067B1] grid grid-cols-12 px-4 md:px-0 rounded-lg py-8 md:py-10 lg:py-12 xl:py-16">
           {/* Left Side - Contact Details */}
           <div className="col-span-12 md:col-span-5 text-white mb-6 md:mb-0">
             <h2 className="text-2xl lg:text-3xl font-semibold">Get in touch</h2>

@@ -4,13 +4,15 @@ import HeroSection from "./components/HeroSection";
 import SectionOne from "./components/SectionOne";
 import Contact from "./components/Contact";
 import Footer from "./components/Footer";
+import VerticalSection from "./components/VerticalSection";
 
 const App: React.FC = () => {
   return (
     <div className="w-full">
       <Header />
       <HeroSection />
-      <SectionOne />
+      {/* <SectionOne /> */}
+      <VerticalSection/>
       <Contact />
       <Footer />
     </div>
